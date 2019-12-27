@@ -54,3 +54,6 @@ sudo npm i -g bojhelper
 <span style="background-color:#A5C261">SUCC</span> Setting successfully changed.
 </pre>
 `boj setting [ext] [exe]` 커맨드를 통해 언어 설정을 변경한다. ext는 코드 파일 확장자, exe는 테스트 시 실행 명령이다. 기본값으로 py, python3으로 설정되어 있다.
+## TODO
+* 제출 기능
+* 에러 바인딩 및 에러 메시지 자세하게
