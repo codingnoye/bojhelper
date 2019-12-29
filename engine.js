@@ -54,15 +54,24 @@ const test = async (pwd) => {
     const cases = JSON.parse(fs.readFileSync(`${pwd}/testcases.json`))
     await asyncForEach(cases, async (testcase, index)=>{
         log.important(`Test Case #${index}`)
-        const tested = await sheller(`echo "${testcase.input}" | ${setting.exe} code.${setting.ext}`)
-        if (tested == testcase.output) {
-            log.success("Correct!")
-        } else {
-            log.warning("Failed!")
-            const logpath = `${pwd}/failed-case-${index}.log`
-            fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
+        try{
+            const tested = await sheller(`echo "${testcase.input}" | ${setting.exe} code.${setting.ext}`)
+            if (tested == testcase.output) {
+                log.success("Correct!")
+            } else {
+                log.warning("Failed!")
+                const logpath = `${pwd}/failed-case-${index}.log`
+                fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
+                log.log(logpath)
+            }
+        } catch (e) {
+            log.error("Error!")
+            const logpath = `${pwd}/error-case-${index}.log`
+            fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+e.stdout+'\n# Error\n'+e.stderr)
             log.log(logpath)
+            console.error(e.stderr)
         }
+        
     })
 }
 
