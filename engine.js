@@ -55,14 +55,27 @@ const test = async (pwd) => {
     await asyncForEach(cases, async (testcase, index)=>{
         log.important(`Test Case #${index}`)
         try{
-            const tested = (process.platform == 'win32')?await sheller(`echo ${testcase.input} | ${setting.exe} code.${setting.ext}`):await sheller(`echo "${testcase.input}" | ${setting.exe} code.${setting.ext}`)
-            if (tested == testcase.output) {
-                log.success("Correct!")
+            if (process.platform == 'win32') {
+                fs.writeFileSync(`${pwd}/tmp`, testcase.input.replace(/\n/, '\r\n'))
+                const tested = await sheller(`type tmp | ${setting.exe} code.${setting.ext}`)
+                if (tested == testcase.output.replace(/\n/, '\r\n')) {
+                    log.success("Correct!")
+                } else {
+                    log.warning("Failed!")
+                    const logpath = `${pwd}/failed-case-${index}.log`
+                    fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
+                    log.log(logpath)
+                }
             } else {
-                log.warning("Failed!")
-                const logpath = `${pwd}/failed-case-${index}.log`
-                fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
-                log.log(logpath)
+                const tested = await sheller(`echo "${testcase.input}" | ${setting.exe} code.${setting.ext}`)
+                if (tested == testcase.output) {
+                    log.success("Correct!")
+                } else {
+                    log.warning("Failed!")
+                    const logpath = `${pwd}/failed-case-${index}.log`
+                    fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
+                    log.log(logpath)
+                }
             }
         } catch (e) {
             log.error("Error!")
