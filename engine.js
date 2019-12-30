@@ -55,7 +55,7 @@ const test = async (pwd) => {
     await asyncForEach(cases, async (testcase, index)=>{
         log.important(`Test Case #${index}`)
         try{
-            const tested = await sheller(`echo "${testcase.input}" | ${setting.exe} code.${setting.ext}`)
+            const tested = (process.platform == 'win32')?await sheller(`echo ${testcase.input} | ${setting.exe} code.${setting.ext}`):await sheller(`echo "${testcase.input}" | ${setting.exe} code.${setting.ext}`)
             if (tested == testcase.output) {
                 log.success("Correct!")
             } else {
