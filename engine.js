@@ -2,7 +2,8 @@ const cheerio = require('cheerio')
 const axios = require('axios')
 const log = require('./logger.js')
 const sheller = require('sheller.js')
-const fs = require('fs')
+const fs = require('fs-extra')
+const timestamp = require('time-stamp')
 const setting = JSON.parse(fs.readFileSync(__dirname+'/setting.json'))
 
 const asyncForEach = async (array, callback) => {
@@ -15,6 +16,7 @@ const init = async (pwd, num) => {
     log.log('Making problem directory...')
     try {
         fs.mkdirSync(`${pwd}/${num}`)
+        fs.mkdirSync(`${pwd}/${num}/log`)
     } catch (error) {
         log.error('Init failed in making directory.')
     }
@@ -47,7 +49,7 @@ const init = async (pwd, num) => {
     } catch (error) {
         log.error('Making code file failed.')
     }
-    log.success("Successfully initialized.")
+    log.success('Successfully initialized.')
 }
 
 const test = async (pwd) => {
@@ -62,24 +64,25 @@ const test = async (pwd) => {
                     log.success("Correct!")
                 } else {
                     log.warning("Failed!")
-                    const logpath = `${pwd}/failed-case-${index}.log`
+                    const logpath = `${pwd}/log/failed-case-${index}_${timestamp('YYYYMMDD_HH:mm:ss')}.log`
                     fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
                     log.log(logpath)
                 }
+                fs.unlinkSync(`${pwd}/tmp`)
             } else {
                 const tested = await sheller(`echo "${testcase.input}" | ${setting.exe} code.${setting.ext}`)
                 if (tested == testcase.output) {
                     log.success("Correct!")
                 } else {
                     log.warning("Failed!")
-                    const logpath = `${pwd}/failed-case-${index}.log`
+                    const logpath = `${pwd}/log/failed-case-${index}_${timestamp('YYYYMMDD_HH:mm:ss')}.log`
                     fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
                     log.log(logpath)
                 }
             }
         } catch (e) {
             log.error("Error!")
-            const logpath = `${pwd}/error-case-${index}.log`
+            const logpath = `${pwd}/log/error-case-${index}_${timestamp('YYYYMMDD_HH:mm:ss')}.log`
             fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+e.stdout+'\n# Error\n'+e.stderr)
             log.log(logpath)
             console.error(e.stderr)
