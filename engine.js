@@ -64,7 +64,7 @@ const test = async (pwd) => {
                     log.success("Correct!")
                 } else {
                     log.warning("Failed!")
-                    const logpath = `${pwd}/log/failed-case-${index}_${timestamp('YYYYMMDD_HH:mm:ss')}.log`
+                    const logpath = `${pwd}/log/failed-case-${index}_${timestamp('YYYYMMDD_HHmmss')}.log`
                     fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
                     log.log(logpath)
                 }
@@ -75,14 +75,14 @@ const test = async (pwd) => {
                     log.success("Correct!")
                 } else {
                     log.warning("Failed!")
-                    const logpath = `${pwd}/log/failed-case-${index}_${timestamp('YYYYMMDD_HH:mm:ss')}.log`
+                    const logpath = `${pwd}/log/failed-case-${index}_${timestamp('YYYYMMDD_HHmmss')}.log`
                     fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
                     log.log(logpath)
                 }
             }
         } catch (e) {
             log.error("Error!")
-            const logpath = `${pwd}/log/error-case-${index}_${timestamp('YYYYMMDD_HH:mm:ss')}.log`
+            const logpath = `${pwd}/log/error-case-${index}_${timestamp('YYYYMMDD_HHmmss')}.log`
             fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+e.stdout+'\n# Error\n'+e.stderr)
             log.log(logpath)
             console.error(e.stderr)

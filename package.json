@@ -1,6 +1,6 @@
 {
   "name": "bojhelper",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A tool for Baekjoon Online Judge",
   "main": "index.js",
   "scripts": {
