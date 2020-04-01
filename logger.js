@@ -5,7 +5,7 @@ module.exports = {
         console.log(`${chalk.bgYellow('WARN')} ${text}`)
     },
     error: (text) => {
-        console.log(`${chalk.bgRed('ERR ')} ${text}`)
+        console.log(`${chalk.bgRed('ERR')} ${text}`)
     },
     success: (text) => {
         console.log(`${chalk.bgGreen('SUCC')} ${text}`)

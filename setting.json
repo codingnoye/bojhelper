@@ -1,4 +1,16 @@
 {
-    "ext": "py",
-    "exe": "python3"
+    "win32" : {
+        "pipe" : "type tmp |",
+        ".py" : ["py code.py"],
+        ".go" : ["go build", "code.exe"],
+        ".cpp" : ["g++ -o code code.cpp", "code.exe"],
+        ".java" : ["javac code.java", "java code"]
+    },
+    "linux" : {
+        "pipe" : "echo tmp |",
+        ".py" : ["py code.py"],
+        ".go" : ["go build", "code"],
+        ".cpp" : ["g++ -o code code.cpp", "code"],
+        ".java" : ["javac code.java", "java code"]
+    }
 }
