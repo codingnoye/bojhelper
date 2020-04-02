@@ -7,10 +7,10 @@
         ".java" : ["javac code.java", "java code"]
     },
     "linux" : {
-        "pipe" : "echo tmp |",
+        "pipe" : "cat tmp |",
         ".py" : ["py code.py"],
-        ".go" : ["go build", "code"],
-        ".cpp" : ["g++ -o code code.cpp", "code"],
+        ".go" : ["go build", "./code"],
+        ".cpp" : ["g++ -o code code.cpp", "./code"],
         ".java" : ["javac code.java", "java code"]
     }
 }
