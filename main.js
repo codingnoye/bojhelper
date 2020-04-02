@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const fs = require('fs')
 const log = require('./logger.js')
 const pkg = JSON.parse(fs.readFileSync(__dirname+'/package.json'))
