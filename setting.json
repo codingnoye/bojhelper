@@ -1,16 +1,65 @@
 {
-    "win32" : {
-        "pipe" : "type tmp |",
-        ".py" : ["py code.py"],
-        ".go" : ["go build", "code.exe"],
-        ".cpp" : ["g++ -o code code.cpp", "code.exe"],
-        ".java" : ["javac code.java", "java code"]
-    },
-    "linux" : {
-        "pipe" : "cat tmp |",
-        ".py" : ["py code.py"],
-        ".go" : ["go build", "./code"],
-        ".cpp" : ["g++ -o code code.cpp", "./code"],
-        ".java" : ["javac code.java", "java code"]
-    }
+  "current": "cpp",
+  "win32": {
+    "pipe": "type tmp |",
+    ".py": [
+      "python3 Main.py"
+    ],
+    ".rb": [
+      "ruby Main.rb"
+    ],
+    ".go": [
+      "go run Main.go"
+    ],
+    ".js": [
+      "node Main.js"
+    ],
+    ".c": [
+      "gcc -o Main Main.c",
+      "Main.exe"
+    ],
+    ".cpp": [
+      "g++ -o Main Main.cpp",
+      "Main.exe"
+    ],
+    ".java": [
+      "javac Main.java",
+      "java Main.class"
+    ],
+    ".kt": [
+      "kotlinc Main.kt -include-runtime -d Main.jar",
+      "java -jar Main.jar"
+    ]
+  },
+  "linux": {
+    "pipe": "cat tmp |",
+    ".py": [
+      "python3 Main.py"
+    ],
+    ".rb": [
+      "ruby Main.rb"
+    ],
+    ".go": [
+      "go run Main.go"
+    ],
+    ".js": [
+      "node Main.js"
+    ],
+    ".cpp": [
+      "g++ -o Main Main.cpp",
+      "./Main"
+    ],
+    ".c": [
+      "gcc -o Main Main.c",
+      "./Main"
+    ],
+    ".java": [
+      "javac Main.java",
+      "java Main"
+    ],
+    ".kt": [
+      "kotlinc Main.kt -include-runtime -d Main.jar",
+      "java -jar Main.jar"
+    ]
+  }
 }

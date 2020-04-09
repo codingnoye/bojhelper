@@ -1,14 +1,14 @@
 #!/usr/bin/env node
-const fs = require('fs')
-const log = require('./logger.js')
-const pkg = JSON.parse(fs.readFileSync(__dirname+'/package.json'))
+const fs = require('fs-extra')
 const yargs = require('yargs')
 const chalk = require('chalk')
+const log = require('./logger.js')
 
+const pkg = JSON.parse(fs.readFileSync(__dirname + '/package.json'))
 const commands = [
     require("./cmd/init.js"),
     require("./cmd/test.js"),
-    require("./cmd/summit.js")
+    require("./cmd/set.js")
 ]
 
 const cmds = {}
