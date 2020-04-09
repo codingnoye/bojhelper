@@ -16,7 +16,7 @@ sudo npm i -g bojhelper
      <font color="#6C99BB">BojHelper</font> <span style="background-color:#6C99BB">2.0.1</span>
 <span style="background-color:#A5C261">SUCC</span> Setting successfully changed.
 </pre>
-`boj set [ext]` 커맨드를 통해 앞으로 생성할 디렉터리의 코드 파일의 확장자명을 설정한다. (기본값 : `cpp`)
+`boj set [ext]` 커맨드를 통해 앞으로 생성할 디렉터리의 코드 파일의 확장자명을 설정한다. (기본값 : `cpp`)<br>
 사용가능한 확장자명 : `py`, `rb`, `go`, `js`, `cpp`, `c`, `java`, `kt`
 ## 문제 가져오기
 <pre>
@@ -39,7 +39,7 @@ sudo npm i -g bojhelper
 <span style="background-color:#d7524e">ERR</span> Test Case #1 : Failed..
 <span style="background-color:#ffd400">WARN</span> Test Case #2 : Error
 </pre>
-`boj test [problem_number]` 커맨드를 통해 테스트케이스들을 이용해 테스트한다. 결과는 로그에 남는다. 확장자명은 알아서 잡아준다.
+`boj test [problem_number]` 커맨드를 통해 테스트케이스들을 이용해 테스트한다. 결과는 로그에 남는다.<br>
 `Correct!`는 정답, `Failed..`는 오답, `Error`는 컴파일 또는 런타임 에러를 나타낸다.
 ```
 Test Case #0
