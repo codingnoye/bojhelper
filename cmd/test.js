@@ -4,71 +4,126 @@ const sheller = require('sheller.js')
 const log = require('../logger.js')
 
 const pwd = process.cwd()
-const setting = JSON.parse(fs.readFileSync(__dirname+'/../setting.json'))
+const platform = process.platform
+const setting = JSON.parse(fs.readFileSync(__dirname + '/../setting.json'))
 const ignore = [
     ".exe",
-    ".class"
+    ".class",
+    ".jar"
 ]
 
-const asyncForEach = async (array, callback) => {
-    for (let index = 0; index < array.length; index++) {
-      await callback(array[index], index, array);
+class Test {
+    constructor(num) {
+        this.num = num
+        this.cases = []
+        this.testcase = {}
+        this.ext = ""
+        this.log = ""
+        this.sheller = null
+    }
+    async process() {
+        this.getCases()
+        this.getExt()
+        await this.scoring()
+        this.makeLog()
+    }
+    getCases() {
+        try {
+            this.cases = JSON.parse(fs.readFileSync(`${pwd}/${this.num}/testcases.json`))
+        } catch {
+            log.error("Finding directory is failed.")
+            process.exit(1)
+        }
+    }
+    getExt() {
+        const files = fs.readdirSync(`${pwd}/${this.num}`)
+
+        for (let file of files) {
+            if (file.substr(0, 4) == "Main" && !ignore.includes(file.substr(4))) {
+                this.ext = file.substr(4)
+            }
+        }
+
+        if (this.ext == "") {
+            log.error("Finding Main file is failed.")
+            process.exit(1)
+        }
+    }
+    async scoring() {
+        for (let i = 0; i < this.cases.length; i++) {
+            let err = null
+            this.testcase = this.cases[i]
+            fs.writeFileSync(`${pwd}/${this.num}/tmp`, this.testcase.input.trim())
+
+            try {
+                await this.getSheller()
+                const check = this.checkSheller(this.testcase)
+
+                if (check) {
+                    log.success(`Test Case #${i} : Correct!`)
+                } else {
+                    log.error(`Test Case #${i} : Failed..`)
+                }
+            } catch (error) {
+                err = error
+                log.warning(`Test Case #${i} : Error`)
+            } finally {
+                this.writeLog(i, err)
+                fs.unlinkSync(`${pwd}/${this.num}/tmp`)
+            }
+        }
+    }
+    async getSheller() {
+        try {
+            const cd = `cd ${this.num};`
+            const pipe = setting[platform]["pipe"]
+            const cmd = setting[platform][this.ext]
+
+            if (cmd.length == 2) {
+                await sheller(`${cd} ${cmd[0]}`)
+                this.sheller = await sheller(`${cd} ${pipe} ${cmd[1]}`)
+            } else {
+                this.sheller = await sheller(`${cd} ${pipe} ${cmd[0]}`)
+            }
+        } catch (err) {
+            throw new Error(err.stderr);
+        }
+    }
+    checkSheller(testcase) {
+        if (this.sheller.trim() == testcase.output.trim()) {
+            return true
+        } else {
+            return false
+        }
+    }
+    writeLog(index, err) {
+        this.log += `Test Case #${index}\n`
+        this.log += "==========================================\n"
+        this.log += `# Input\n${this.testcase.input}\n# Correct Output\n${this.testcase.output}\n` // '\n# Failed Output\n'+e.stdout+'\n# Error\n'+e.stderr
+        if (!err) {
+            this.log += `# Output\n${this.sheller.trim()}`
+        } else {
+            this.log += `# Output\n${err}`
+        }
+        this.log += "\n\n"
+    }
+    makeLog() {
+        const path = `${pwd}/${this.num}/log/log_${timestamp("YYYYMMDD_HH:mm:ss")}.log`
+        fs.writeFile(path, this.log)
     }
 }
 
-const test = async (argv) => {
-    const cases = JSON.parse(fs.readFileSync(`${pwd}/testcases.json`))
-    const files = await fs.readdir(pwd)
-    let ext = ""
-
-    for (let file of files) {
-        if (file.substr(0, 4) == "code" && !ignore.includes(file.substr(4))) {
-            ext = file.substr(4)
-        }
+const main = async (argv) => {
+    if (argv.length != 2) {
+        log.error("Usage: 'boj set [ext]'")
+        return
     }
 
-    if (ext == "") {
-        log.error("Searching code files failed")
-        process.exit(1)
-    }
-
-    await asyncForEach(cases, async (testcase, index)=>{
-        log.important(`Test Case #${index}`)
-        try {
-            let tested = null
-            const platform = process.platform
-            fs.writeFileSync(`${pwd}/tmp`, testcase.input.trim())
-
-            if (setting[platform][ext].length == 2) {
-                await sheller(`${setting[platform][ext][0]}`)
-                tested = await sheller(`${setting[platform]["pipe"]} ${setting[platform][ext][1]}`)
-            } else {
-                tested = await sheller(`${setting[platform]["pipe"]} ${setting[platform][ext][0]}`)
-            }
-
-            if (tested.trim() == testcase.output.trim()) {
-                log.success("Correct!")
-            } else {
-                log.warning("Failed!")
-                const logpath = `${pwd}/log/failed-case-${index}_${timestamp('YYYYMMDD_HHmmss')}.log`
-                fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+tested)
-                log.log(logpath)
-            }
-
-        } catch (e) {
-            log.error("Error!")
-            const logpath = `${pwd}/log/error-case-${index}_${timestamp('YYYYMMDD_HHmmss')}.log`
-            fs.writeFileSync(logpath, '# Input\n'+testcase.input+'\n# Correct Output\n'+testcase.output+'\n# Failed Output\n'+e.stdout+'\n# Error\n'+e.stderr)
-            log.log(logpath)
-            console.error(e.stderr)
-
-        } finally {
-            fs.unlinkSync(`./tmp`)
-        }
-    })
+    const test = new Test(argv[1])
+    test.process()
 }
 
 module.exports = {
-    func : test,
-    keyword : "test"
+    func: main,
+    keyword: "test"
 }
