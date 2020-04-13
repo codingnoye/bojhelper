@@ -1,4 +1,4 @@
-const chalk = require("chalk")
+const chalk = require('chalk')
 
 module.exports = {
     warning: (text) => {
@@ -10,10 +10,13 @@ module.exports = {
     success: (text) => {
         console.log(`${chalk.bgGreen('SUCC')} ${text}`)
     },
+    exceeded: (text) => {
+        console.log(`${chalk.bgCyan('TIME')} ${text}`)
+    },
     important: (text) => {
         console.log(`     ${chalk.bold(text)}`)
     },
     log: (text) => {
         console.log(`     ${text}`)
-    }
+    },
 }

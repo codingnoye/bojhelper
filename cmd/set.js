@@ -1,17 +1,8 @@
-const fs = require("fs-extra")
-const log = require("../logger.js")
+const fs = require('fs-extra')
+const log = require('../logger.js')
 
 const setting = JSON.parse(fs.readFileSync(__dirname + '/../setting.json'))
-const support = [
-    "py",
-    "rb",
-    "go",
-    "js",
-    "cpp",
-    "c",
-    "java",
-    "kt",
-]
+const support = ['py', 'rb', 'go', 'js', 'cpp', 'c', 'java', 'kt']
 
 class Set {
     constructor(ext) {
@@ -20,7 +11,7 @@ class Set {
     }
     process() {
         this.writeSetting()
-        log.success("Setting successfully changed.")
+        log.success('Setting successfully changed.')
     }
     getNewSetting() {
         const newSetting = setting
@@ -30,9 +21,12 @@ class Set {
     }
     writeSetting() {
         try {
-            fs.writeFileSync(__dirname + '/../setting.json', JSON.stringify(this.getNewSetting(), null, 2))
+            fs.writeFileSync(
+                __dirname + '/../setting.json',
+                JSON.stringify(this.getNewSetting(), null, 2)
+            )
         } catch {
-            log.error("Changing setting is failed.")
+            log.error('Changing setting is failed.')
             process.exit(1)
         }
     }
@@ -44,8 +38,8 @@ const main = async (argv) => {
         return
     }
     if (!support.includes(argv[1])) {
-        log.error("Unsupported language.")
-        log.important(`Supported language is ${support.join(", ")}`)
+        log.error('Unsupported language.')
+        log.important(`Supported language is ${support.join(', ')}`)
         return
     }
 
@@ -54,6 +48,6 @@ const main = async (argv) => {
 }
 
 module.exports = {
-    keyword: "set",
+    keyword: 'set',
     func: main,
 }

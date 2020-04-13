@@ -1,24 +1,24 @@
 {
-  "name": "bojhelper",
-  "version": "2.0.1",
-  "description": "A tool for Baekjoon Online Judge",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "bin": {
-    "boj": "./main.js"
-  },
-  "author": "codingnoye <codingnoye@kookmin.ac.kr>",
-  "license": "MIT",
-  "dependencies": {
-    "chalk": "^3.0.0",
-    "cheerio": "^1.0.0-rc.3",
-    "fs-extra": "^8.1.0",
-    "request": "^2.88.2",
-    "request-promise-native": "^1.0.8",
-    "sheller.js": "^0.1.3",
-    "time-stamp": "^2.2.0",
-    "yargs": "^15.0.2"
-  }
+    "name": "bojhelper",
+    "version": "2.0.2",
+    "description": "A tool for Baekjoon Online Judge",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "bin": {
+        "boj": "./main.js"
+    },
+    "author": "codingnoye <codingnoye@kookmin.ac.kr>",
+    "license": "MIT",
+    "dependencies": {
+        "chalk": "^3.0.0",
+        "cheerio": "^1.0.0-rc.3",
+        "fs-extra": "^8.1.0",
+        "request": "^2.88.2",
+        "request-promise-native": "^1.0.8",
+        "sheller.js": "^0.1.3",
+        "time-stamp": "^2.2.0",
+        "yargs": "^15.0.2"
+    }
 }

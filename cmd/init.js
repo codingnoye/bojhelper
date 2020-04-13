@@ -1,6 +1,6 @@
-const fs = require("fs-extra")
-const crawler = require("../crawler.js")
-const log = require("../logger.js")
+const fs = require('fs-extra')
+const crawler = require('../crawler.js')
+const log = require('../logger.js')
 
 const setting = JSON.parse(fs.readFileSync(__dirname + '/../setting.json'))
 const pwd = process.cwd()
@@ -18,7 +18,7 @@ class Init {
             this.makeDirectory()
             await this.parseTestCase()
             this.makeFileInDirectory()
-            log.success("Directory successfully created.")
+            log.success('Directory successfully created.')
         } catch {
             this.controlError()
         }
@@ -32,7 +32,7 @@ class Init {
         try {
             this.cases = await crawler.getTestcase(this.num)
         } catch {
-            log.error("Parsing cases is failed.")
+            log.error('Parsing cases is failed.')
             throw new Error()
         }
     }
@@ -42,7 +42,7 @@ class Init {
             fs.mkdirSync(`${pwd}/${this.num}/log`)
             this.isDirectoryCreated = true
         } catch {
-            log.error("Making directory is failed.")
+            log.error('Making directory is failed.')
             throw new Error()
         }
     }
@@ -64,5 +64,5 @@ const main = async (argv) => {
 
 module.exports = {
     func: main,
-    keyword: "init"
+    keyword: 'init',
 }
