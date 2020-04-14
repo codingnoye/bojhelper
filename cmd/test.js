@@ -77,7 +77,7 @@ class Test {
     }
     async getSheller() {
         try {
-            const cd = `cd ${this.num};`
+            const cd = `cd ${this.num} &&`
             const pipe = setting[platform]['pipe']
             const cmd = setting[platform][this.ext]
 
@@ -88,6 +88,7 @@ class Test {
                 this.sheller = await sheller(`${cd} ${pipe} ${cmd[0]}`)
             }
         } catch (err) {
+            console.log(err)
             throw new Error(err.stderr)
         }
     }
@@ -122,15 +123,14 @@ class Test {
     }
     makeLog() {
         const path = `${pwd}/${this.num}/log/log_${timestamp('YYYYMMDD_HH:mm:ss')}.log`
-        fs.writeFile(path, this.log).then(() => {
-            process.exit(1)
-        })
+        fs.writeFileSync(path, this.log)
+        process.exit(1)
     }
 }
 
 const main = async (argv) => {
     if (argv.length != 2) {
-        log.error("Usage: 'boj set [ext]'")
+        log.error("Usage: 'boj test [num]'")
         return
     }
 
